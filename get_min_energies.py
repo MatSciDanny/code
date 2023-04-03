@@ -33,4 +33,5 @@ for pair in sorted_d:
 plt.xticks(rotation=89)
 plt.ylabel('Energy (Hartree)')
 plt.tight_layout()
-plt.show()
+plt.savefig('energy_plot.png',format='png')
+#plt.show()
