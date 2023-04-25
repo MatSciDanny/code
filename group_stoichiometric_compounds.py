@@ -1,9 +1,8 @@
-import numpy as np
 import os, glob, shutil, operator
 from collections import Counter, OrderedDict
 from matplotlib import pyplot as plt
 
-# Get a dictionary with the number of atoms and atom types for a cif file
+# Get a dictionary with the number of atoms and atom types from a cif file
 def numatoms(file):
     with open(file, 'r') as f:
         count = 9999999
@@ -45,7 +44,7 @@ def get_energy(file):
                 energy = float(line.split()[-1])
     return(energy)
 
-# Go to folders and plot energy graph for each stoichiometry
+# Go into folders and plot energy vs file name (from low to high energy) for each stoichiometry
 def sort_plot_energies(all_dirs):
     for i in all_dirs:
         parent_dir = os.getcwd()
@@ -73,7 +72,6 @@ def sort_plot_energies(all_dirs):
         plt.ylabel('Energy (Hartree)')
         plt.tight_layout()
         plt.savefig('energy_plot.png',format='png')
-        # Change dir
         os.chdir(parent_dir)
 
 
@@ -88,10 +86,11 @@ for path in pathlist:
     path_in_str = str(path)
     material = path_in_str[nDIR:-ntype]
     # Make a list like this: [[material1, {ordered elements}], [material2, {ordered elements}], ...]
-    # Ordered dictionaries can be compared directly, so we can group materials with same stoichiometry
+    # Ordered dictionaries can be compared directly to group materials with same stoichiometry
     list_dict.append([material,str(OrderedDict(sorted(numatoms(path_in_str).items())))])
     compositions.append(str(OrderedDict(sorted(numatoms(path_in_str).items()))))
 unique_compounds = list(set(compositions))
+# Now we use the functions we defined previously
 group_list = group_unique_materials(list_dict,unique_compounds)
 all_dirs = make_dirs_copy_files(DIR,unique_compounds,group_list)
 sort_plot_energies(all_dirs)

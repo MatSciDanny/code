@@ -23,7 +23,7 @@ def crystal17_to_cif(input_file, output_file):
             # Determine if bulk or slab calculation
             if line.startswith(' CRYSTAL CALCULATION'):
                 calc_type = 'bulk'
-            if line.startswith(' SLAB CALCULATION'):
+            if line.startswith(' SLAB CALCULATION') or line.startswith(' * TWO DIMENSIONAL SLAB'):
                 calc_type = 'slab'
     f.close()
     atom_data = atom_data[-num_atoms:]
